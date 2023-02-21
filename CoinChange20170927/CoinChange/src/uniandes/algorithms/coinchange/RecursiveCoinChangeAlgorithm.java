@@ -29,7 +29,7 @@ public class RecursiveCoinChangeAlgorithm implements CoinChangeAlgorithm {
 		int[] a = calcular(d,i, j-d[i-1]);
 		int valorA = valor(a) + 1;
 		int[] b = calcular(d,i-1,j);
-		int valorB = valor(b) + 1;
+		int valorB = valor(b);
 		if (valorA <= valorB) {
 			a[i-1] = a[i-1] + 1;
 			return a;
