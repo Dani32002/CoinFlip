@@ -1,48 +1,49 @@
 package uniandes.algorithms.coinchange;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class RecursiveCoinChangeAlgorithm implements CoinChangeAlgorithm {
 	int[] data;
 	@Override
 	public int[] calculateOptimalChange(int totalValue, int[] denominations) {
-		data = new int[denominations.length];
-		Arrays.fill(data, 0);
-		ArrayList<Integer> list = new ArrayList<>();
-		for (int z = 0; z<denominations.length; z ++) list.add(denominations[z]);
-		Collections.sort(list);
-		int result = calcular(denominations, denominations.length, totalValue);
-		int j = denominations.length - 1; 
-		int total = totalValue;
-		for (int i = 0; i < result; i++) {
-			if (total < list.get(j)) {
-				i--;
-				j--;
-			}else if (totalValue >= list.get(j)) {
-				data[j] = data[j] + 1;
-				total = total - list.get(j);
-			}
-		}
-		return data;
+		return calcular(denominations, denominations.length, totalValue);
 	}
 	
-	public Integer calcular(int[] d, Integer i, Integer j) {
+	public int[] calcular(int[] d, Integer i, Integer j) {
 		if (i == 0) {
-			return (int)Double.POSITIVE_INFINITY;
+			int[] datos = new int[d.length];
+			Arrays.fill(datos, (int)Double.POSITIVE_INFINITY);
+			return datos;
 		} else if (j == 0) {
-			 return 0;
+			int[] datos = new int[d.length];
+			Arrays.fill(datos, 0);
+			return datos;
 		} else if (j == d[i-1]) {
-			return 1;
+			int[] datos = new int[d.length];
+			Arrays.fill(datos, 0);
+			datos[i-1] = 1;
+			return datos;
 		} else if (d[i-1] > j) {
 			return calcular(d, i-1,j);
 		}
-		int a = 1 + calcular(d,i, j-d[i-1]);
-		int b = calcular(d,i-1,j);
-		if (a <= b) {
+		int[] a = calcular(d,i, j-d[i-1]);
+		int valorA = valor(a) + 1;
+		int[] b = calcular(d,i-1,j);
+		int valorB = valor(b) + 1;
+		if (valorA <= valorB) {
+			a[i-1] = a[i-1] + 1;
 			return a;
 		}
 		return b;
+	}
+	
+	public int valor(int[]v) {
+		int sum = 0;
+		int i = 0;
+		while (i < v.length) {
+			sum = sum + v[i];
+			i++;
+		}
+		return sum;
 	}
 }
